@@ -1,0 +1,25 @@
+{
+  "name": "evm-automation",
+  "version": "1.0.0",
+  "description": "Permissionless EVM automation protocol — Hardhat project",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:registry": "hardhat run scripts/deployRegistry.ts --network evm",
+    "deploy:registry:local": "hardhat run scripts/deployRegistry.ts --network localhost",
+    "deploy:counter": "hardhat run scripts/deployPeriodicCounter.ts --network evm",
+    "deploy:momentum": "hardhat run scripts/deployMomentumStrategy.ts --network evm",
+    "deploy:momentum:local": "hardhat run scripts/deployMomentumStrategy.ts --network localhost",
+    "node": "hardhat node",
+    "clean": "hardhat clean"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "@uniswap/v3-core": "^1.0.1",
+    "@uniswap/v3-periphery": "^1.4.4",
+    "dotenv": "^16.0.0"
+  }
+}
