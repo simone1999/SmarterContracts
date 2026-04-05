@@ -1,0 +1,16 @@
+# Environment
+.env
+contracts/.env
+
+# Hardhat
+contracts/cache/
+contracts/artifacts/
+contracts/dist/
+contracts/typechain-types/
+
+# Node
+contracts/node_modules/
+
+# Misc
+*.log
+.DS_Store
