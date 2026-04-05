@@ -15,11 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EVM Automation",
+  title: "Smarter Contracts",
   description: "Permissionless automation protocol for EVM chains",
   icons: {
-    icon: "/favicon.ico",
-    apple: "/logo192.png",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
 };
 

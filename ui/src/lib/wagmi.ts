@@ -19,7 +19,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName: "EVM Automation",
+    appName: "Smarter Contracts",
     // A placeholder is required by the type but is only used by WalletConnect
     // wallets (none listed above), so it never makes a real WC connection.
     projectId: "evm-automation-ui",

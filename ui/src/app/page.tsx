@@ -16,7 +16,7 @@ export default function Home() {
     <div className="space-y-8">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white">Automation Dashboard</h1>
+        <h1 className="text-3xl font-bold text-white">Smarter Contracts</h1>
         <p className="mt-2 text-gray-400 text-sm">
           Permissionless upkeep registry on 0G Network. Trigger ready contracts
           to earn solver rewards.
