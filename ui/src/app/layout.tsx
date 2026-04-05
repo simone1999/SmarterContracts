@@ -16,7 +16,18 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Smarter Contracts",
-  description: "Permissionless automation protocol for EVM chains",
+  description: "Permissionless on-chain automation",
+  openGraph: {
+    title: "Smarter Contracts",
+    description: "Permissionless on-chain automation",
+    images: [{ url: "/cover.png", width: 1920, height: 1080 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Smarter Contracts",
+    description: "Permissionless on-chain automation",
+    images: ["/cover.png"],
+  },
 };
 
 export default function RootLayout({
