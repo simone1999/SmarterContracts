@@ -6,6 +6,16 @@ Any contract that implements the `IAutomatable` interface can be triggered by an
 
 ---
 
+## Overview
+
+The system has three main parts working together:
+
+- **Smart contracts** — the `AutomationRegistry` on-chain hub that coordinates registrations, upkeep triggers, and solver payments, plus the `IAutomatable` interface that any contract can implement to become automatable.
+- **Solver** — an off-chain Python process that continuously monitors all registered contracts, simulates `checkUpkeep` for free, and submits `triggerUpkeep` transactions for any that are ready, earning the reward.
+- **UI** — a Next.js web app that lets anyone browse all registered contracts, inspect their upkeep history, fund balances, and manually trigger upkeep from the browser — no CLI needed.
+
+---
+
 ## How it works
 
 ```
@@ -58,6 +68,14 @@ solver/
 ├── solver.py                     ← Off-chain solver (Python)
 ├── requirements.txt
 └── Dockerfile
+
+ui/
+├── src/
+│   ├── app/                      ← Next.js app router pages
+│   ├── components/               ← UI components (ContractCard, AdminPanel, FundPanel, …)
+│   ├── hooks/                    ← wagmi/viem data hooks
+│   └── lib/                      ← ABI, chain config, wagmi setup
+└── .env.local                    ← Chain & registry configuration
 ```
 
 ---
@@ -221,7 +239,7 @@ python solver.py trigger \
 ### Docker
 
 ```bash
-docker build -t evm-solver .
+docker build -t evm-solver ./solver
 
 docker run --rm evm-solver run \
   --rpc_url=https://sepolia.infura.io/v3/YOUR_KEY \
@@ -242,6 +260,55 @@ docker run --rm evm-solver run \
 | `--gas_multiplier` | `1.2` | Multiplier applied to base fee and priority fee |
 | `--poa` | `false` | Enable POA middleware (Polygon, BSC, …) |
 | `--log_level` | `INFO` | `DEBUG` / `INFO` / `WARNING` |
+
+---
+
+## UI — setup & usage
+
+The web UI lets anyone explore the registry, monitor contracts, fund balances, and trigger upkeep from the browser using their connected wallet.
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) ≥ 18
+- A WalletConnect project ID (from [cloud.walletconnect.com](https://cloud.walletconnect.com))
+
+### Install & configure
+
+```bash
+cd ui
+npm install
+cp .env.local.example .env.local   # or create .env.local manually
+```
+
+Edit `ui/.env.local`:
+
+```env
+NEXT_PUBLIC_REGISTRY_ADDRESS=0xYourRegistryAddress
+NEXT_PUBLIC_RPC_URL=https://your-rpc-endpoint
+NEXT_PUBLIC_CHAIN_ID=your_chain_id
+NEXT_PUBLIC_EXPLORER_URL=https://your-block-explorer
+```
+
+### Run
+
+```bash
+# Development server
+npm run dev
+
+# Production build
+npm run build
+npm start
+```
+
+The app runs on [http://localhost:3000](http://localhost:3000) by default.
+
+### What the UI provides
+
+- **Registry dashboard** — lists all registered contracts with their current balance and upkeep status.
+- **Contract detail page** — per-contract view with upkeep history, balance, and admin controls.
+- **Fund panel** — top up any contract's solver-reward balance directly from the browser.
+- **Admin panel** — withdraw surplus funds or cancel a registration (admin wallet required).
+- **Trigger button** — manually call `triggerUpkeep` from the browser for testing or one-off execution.
 
 ---
 
@@ -268,7 +335,6 @@ contract MyJob is IAutomatable {
     function checkUpkeep() external view override
         returns (bool, bytes memory)
     {
-        // expensive off-chain logic — cheap on-chain version as guard
         bool ready = /* your condition */;
         return (ready, abi.encode(/* hint data */));
     }
